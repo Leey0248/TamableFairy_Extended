@@ -37,7 +37,7 @@ public class FairyGuiScreen extends AbstractContainerScreen<FairyGuiMenu> {
         super(menu, playerInventory, title);
         fairy = this.menu.fairy;
         if (fairy == null) fairy = new EntityFairy(playerInventory.player.level());
-        this.imageWidth = 256;
+        this.imageWidth = 276;
         this.imageHeight = 166;
     }
 
@@ -80,12 +80,21 @@ public class FairyGuiScreen extends AbstractContainerScreen<FairyGuiMenu> {
         syncState();
     }
 
-    private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(MODID, "texture/gui/fairy_gui.png");
+    private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(MODID, "texture/gui/fairy_gui3.png");
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float v, int i, int i1) {
-        guiGraphics.blit(texture, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, this.imageWidth, this.imageHeight);
-        RenderSystem.disableBlend();
+    protected void renderBg(
+            GuiGraphics guiGraphics,
+            float v, int i, int i1) {
+
+        guiGraphics.blit(
+            texture,
+            this.leftPos,
+            this.topPos,
+            0, 0,
+            276, 166,
+            276, 166
+        );
     }
 
     @Override

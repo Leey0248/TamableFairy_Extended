@@ -33,9 +33,9 @@ public class FairyGuiMenu extends AbstractContainerMenu {
     private void createInv(Inventory playerInv) {
         for (int i = 0; i < 3; ++i)
             for (int j = 0; j < 9; ++j)
-                this.addSlot(new Slot(playerInv, j + (i + 1) * 9, 8 + j * 18, 84 + i * 18));
+                this.addSlot(new Slot(playerInv, j + (i + 1) * 9, 108 + j * 18, 84 + i * 18));
         for (int i = 0; i < 9; ++i)
-            this.addSlot(new Slot(playerInv, i, 8 + i * 18, 142));
+            this.addSlot(new Slot(playerInv, i, 108 + i * 18, 142));
 
     }
 
