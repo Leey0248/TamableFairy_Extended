@@ -1,0 +1,11 @@
+{
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-21",
+            "path": "C:\\Java\\Java 21.0.12.1",
+            "default": true
+        }
+    ],
+    "java.import.gradle.java.home": "C:\\Java\\Java 21.0.12.1",
+    "java.debug.settings.onBuildFailureProceed": true
+}

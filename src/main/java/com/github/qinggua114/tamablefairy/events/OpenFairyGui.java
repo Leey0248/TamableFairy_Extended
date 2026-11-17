@@ -27,7 +27,7 @@ public class OpenFairyGui {
         Player player = event.getEntity();
         if (!(player.getUUID().equals(tameData.owner()))) return;
 
-        if (!player.isShiftKeyDown()) return;
+        //if (!player.isShiftKeyDown()) return; //不用shift也能開GUI
 
         player.openMenu(new FairyMenuProvider((EntityFairy) target),
                 (byteBuf) -> byteBuf.writeInt(target.getId()));

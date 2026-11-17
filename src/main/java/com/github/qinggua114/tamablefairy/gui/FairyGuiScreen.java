@@ -37,7 +37,7 @@ public class FairyGuiScreen extends AbstractContainerScreen<FairyGuiMenu> {
         super(menu, playerInventory, title);
         fairy = this.menu.fairy;
         if (fairy == null) fairy = new EntityFairy(playerInventory.player.level());
-        this.imageWidth = 176;
+        this.imageWidth = 256;
         this.imageHeight = 166;
     }
 
