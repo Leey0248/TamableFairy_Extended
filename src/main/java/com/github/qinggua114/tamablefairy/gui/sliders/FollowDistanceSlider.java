@@ -12,12 +12,21 @@ public class FollowDistanceSlider extends AbstractSliderButton {
 
     @Override
     protected void updateMessage() {
+        int range = getValue();
+
         this.setMessage(
                 Component.translatable(
                         "slider.follow_range",
-                        String.valueOf((int) (this.value * 32))
+                        range == 0
+                                ? Component.translatable("text.disabled")
+                                : String.valueOf(range)
                 )
         );
+    }
+
+    public void setValue(double newValue) {
+        this.value = Math.max(0, Math.min(1, newValue));
+        this.updateMessage();
     }
 
     @Override
@@ -31,10 +40,6 @@ public class FollowDistanceSlider extends AbstractSliderButton {
 
     public int getValue() {
         return (int) (this.value * 32);
-    }
-
-    public void setValue(double newValue) {
-        this.value = newValue;
     }
 
     @Override

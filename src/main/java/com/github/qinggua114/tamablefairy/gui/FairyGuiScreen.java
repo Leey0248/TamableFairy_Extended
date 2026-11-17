@@ -25,8 +25,8 @@ public class FairyGuiScreen extends AbstractContainerScreen<FairyGuiMenu> {
 
     private EntityFairy fairy;
     private Button attackModeBtn;
-    private Button enableFollowOwnerBtn;
-    private Button enableMoveAroundBtn;
+    //private Button enableFollowOwnerBtn;
+    //private Button enableMoveAroundBtn;
     private FollowDistanceSlider followDistanceSlider;
     private MoveRangeSlider moveRangeSlider;
     private boolean followOwnerEnabled;
@@ -39,6 +39,8 @@ public class FairyGuiScreen extends AbstractContainerScreen<FairyGuiMenu> {
         if (fairy == null) fairy = new EntityFairy(playerInventory.player.level());
         this.imageWidth = 276;
         this.imageHeight = 166;
+        this.inventoryLabelX = 108;
+        this.inventoryLabelY = 72;
     }
 
     @Override
@@ -49,30 +51,40 @@ public class FairyGuiScreen extends AbstractContainerScreen<FairyGuiMenu> {
     @Override
     public void init() {
         super.init();
+
+        //攻擊模式
         attackModeBtn = Button.builder(
                 Component.translatable("btn.attack_mode"),
                 this::onAttackModeBtnClicked
-        ).bounds(this.leftPos + 50, this.topPos + 6, 120, 20).build();
+        ).bounds(this.leftPos + 7, this.topPos + 84, 96, 20).build();
         this.addRenderableWidget(attackModeBtn);
 
+        //跟隨主人
+        /*
         enableFollowOwnerBtn = Button.builder(
                 Component.translatable("btn.enable_follow"),
                 this::onEnableFollowOwnerBtnClicked
-        ).bounds(this.leftPos + 50, this.topPos + 28, 50, 20).build();
+        ).bounds(this.leftPos + 7, this.topPos + 68, 96, 20).build();
         this.addRenderableWidget(enableFollowOwnerBtn);
+        */
 
+        //遊蕩
+        /*
         enableMoveAroundBtn = Button.builder(
                 Component.translatable("btn.enable_move_around"),
                 this::onEnableMoveAroundBtnClicked
-        ).bounds(this.leftPos + 50, this.topPos + 50, 50, 20).build();
+        ).bounds(this.leftPos + 7, this.topPos + 116, 96, 20).build();
         this.addRenderableWidget(enableMoveAroundBtn);
+        */
 
-        followDistanceSlider = new FollowDistanceSlider(this.leftPos + 120, this.topPos + 28, 50, 20,
+        //跟隨距離
+        followDistanceSlider = new FollowDistanceSlider(this.leftPos + 7, this.topPos + 108, 96, 20,
                 Component.translatable("slider.follow_range"),
                 0F, fairy);
         this.addRenderableWidget(followDistanceSlider);
 
-        moveRangeSlider = new MoveRangeSlider(this.leftPos + 120, this.topPos + 50, 50, 20,
+        //活動範圍
+        moveRangeSlider = new MoveRangeSlider(this.leftPos + 7, this.topPos + 132, 96, 20,
                 Component.translatable("slider.move_range"),
                 0F, fairy);
         this.addRenderableWidget(moveRangeSlider);
@@ -80,7 +92,7 @@ public class FairyGuiScreen extends AbstractContainerScreen<FairyGuiMenu> {
         syncState();
     }
 
-    private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(MODID, "texture/gui/fairy_gui3.png");
+    private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(MODID, "texture/gui/fairy_gui4.png");
 
     @Override
     protected void renderBg(
@@ -121,6 +133,7 @@ public class FairyGuiScreen extends AbstractContainerScreen<FairyGuiMenu> {
                 )
         );
 
+        /*
         this.enableFollowOwnerBtn.setMessage(
                 Component.translatable(
                         "btn.enable_follow",
@@ -138,6 +151,7 @@ public class FairyGuiScreen extends AbstractContainerScreen<FairyGuiMenu> {
                                 Component.translatable("text.disabled")
                 )
         );
+        */
     }
 
     @Override
@@ -159,6 +173,7 @@ public class FairyGuiScreen extends AbstractContainerScreen<FairyGuiMenu> {
         };
     }
 
+    /*
     private void onEnableFollowOwnerBtnClicked(Button button) {
         followOwnerEnabled = !followOwnerEnabled;
     }
@@ -166,6 +181,7 @@ public class FairyGuiScreen extends AbstractContainerScreen<FairyGuiMenu> {
     private void onEnableMoveAroundBtnClicked(Button button) {
         moveAroundEnabled = !moveAroundEnabled;
     }
+    */
 
     private void syncState() {
 
@@ -180,30 +196,51 @@ public class FairyGuiScreen extends AbstractContainerScreen<FairyGuiMenu> {
                         String.valueOf(actState.followDistance())
                 )
         );
-        this.followDistanceSlider.setValue((double) actState.followDistance() / 32);
 
-        this.moveRangeSlider.setMessage(
-                Component.translatable(
-                        "slider.move_range",
-                        String.valueOf(actState.moveRange())
-                )
+        this.followDistanceSlider.setValue(
+                actState.followOwnerEnabled()
+                        ? (double) actState.followDistance() / 32
+                        : 0
         );
-        this.moveRangeSlider.setValue((double) actState.moveRange() / 32);
+
+        this.moveRangeSlider.setValue(
+                actState.moveAroundEnabled()
+                        ? (double) actState.moveRange() / 32
+                        : 0
+        );
     }
 
     @Override
     public void onClose() {
         Vec3 actRangeCenter = fairy.position();
         PacketDistributor.sendToServer(new C2SFairyGuiPayLoad(
-                        fairy.getId(),
-                        newMode,
-                        followOwnerEnabled,
-                        moveAroundEnabled,
-                        followDistanceSlider.getValue(),
-                        moveRangeSlider.getValue(),
-                        actRangeCenter
-                )
+                    fairy.getId(),
+                    newMode,
+                    followDistanceSlider.getValue() > 0,
+                    moveRangeSlider.getValue() > 0,
+                    followDistanceSlider.getValue(),
+                    moveRangeSlider.getValue(),
+                    actRangeCenter
+            )
         );
         super.onClose();
+    }
+
+    @Override
+    protected void renderLabels(
+            GuiGraphics guiGraphics,
+            int mouseX,
+            int mouseY
+    ) {
+        super.renderLabels(guiGraphics, mouseX, mouseY);
+
+        guiGraphics.drawString(
+                this.font,
+                Component.translatable("lable.fairy_inventory"),
+                181,
+                18,
+                0x404040,
+                false
+        );
     }
 }
