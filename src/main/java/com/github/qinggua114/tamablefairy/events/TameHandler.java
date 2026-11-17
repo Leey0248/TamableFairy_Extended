@@ -33,7 +33,7 @@ public class TameHandler {
         TameData tameData = target.getData(TAME_DATA);
 
         if (target.getClass().equals(EntityFairy.class) && !tameData.tamed()) {//解决将妖怪的归家中的生物当成女仆妖精驯服的问题
-            if (event.getItemStack().is(Items.CAKE)) {
+            if (event.getItemStack().is(Items.APPLE)) { 
                 TameData newData = new TameData(true, player.getUUID(), player.getDisplayName().getString());
                 target.setData(TAME_DATA, newData);
                 target.setData(ACT_STATE, ActState.DEFAULT);
